@@ -28,6 +28,20 @@ Route.group(() => {
   )
   // must login and verify email
   Route.group(() => {
-    Route.resource('venues', 'VenuesController').apiOnly()
+    // owner
+    Route.resource('venues', 'VenuesController')
+      .apiOnly()
+      .middleware({
+        store: ['acl:owner'],
+        update: ['acl:owner'],
+        destroy: ['acl:owner'],
+      })
+    Route.resource('venues.fields', 'FieldsController')
+      .apiOnly()
+      .middleware({
+        store: ['acl:owner'],
+        update: ['acl:owner'],
+        destroy: ['acl:owner'],
+      })
   }).middleware(['auth', 'verify'])
 }).prefix('/api/v1')
