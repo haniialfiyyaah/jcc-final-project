@@ -1,8 +1,8 @@
 import Mail from '@ioc:Adonis/Addons/Mail'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Database from '@ioc:Adonis/Lucid/Database'
 import OtpCode from 'App/Models/OtpCode'
 import User from 'App/Models/User'
+import OtpValidator from 'App/Validators/OtpValidator'
 import RegisterUserValidator from 'App/Validators/RegisterUserValidator'
 
 export default class AuthController {
@@ -33,6 +33,15 @@ export default class AuthController {
     })
   }
   public async otpConfirmation({ request, response }: HttpContextContract) {
-    response.created({ message: 'Email verified successfully.' })
+    const { email, otp_code } = await request.validate(OtpValidator)
+    const user = await User.findByOrFail('email', email)
+    const otpCheck = await OtpCode.findBy('otp_code', otp_code)
+    if (user?.id === otpCheck?.user_id) {
+      user.is_verified = true
+      await user?.save()
+      return response.ok({ message: 'Email verified successfully.' })
+    } else {
+      return response.badRequest({ message: 'Email verification failed.' })
+    }
   }
 }
