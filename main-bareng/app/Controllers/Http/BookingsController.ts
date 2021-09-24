@@ -27,12 +27,34 @@ export default class BookingsController {
     })
   }
 
-  public async index({ response }: HttpContextContract) {
-    const bookings = await Booking.query()
-      .preload('field')
+  public async index({ request, response }: HttpContextContract) {
+    const { venue_id, play_date, start, type } = request.qs()
+    // filter
+    let query = Booking.query().whereHas('field', (query) => {
+      venue_id && query.where('venue_id', venue_id)
+      type && query.where('type', type)
+    })
+    play_date &&
+      query.whereBetween('play_date_start', [
+        `${play_date} ${start || '00:00'}`,
+        `${play_date} 23:59`,
+      ])
+    // get booking with preload
+    const bookings = await query
       .preload('user')
       .preload('players')
+      .preload('field')
+
     const bookingsJSON = bookings.map((booking) => this.serializeField(booking))
+
+    // venue go first
+    bookingsJSON.map((booking) => {
+      const { id, name, type } = booking.field
+      let venue = { ...booking.field?.venue, field: { id, name, type } }
+      booking.venue = venue
+      delete booking.field
+      delete booking.players
+    })
     response.ok({ message: 'Success.', data: bookingsJSON })
   }
 
@@ -70,6 +92,11 @@ export default class BookingsController {
       .preload('user')
       .firstOrFail()
     const bookingJSON = this.serializeField(booking)
+    // venue go first
+    const { id, name, type } = bookingJSON.field
+    let venue = { ...bookingJSON.field?.venue, field: { id, name, type } }
+    bookingJSON.venue = venue
+    delete bookingJSON.field
     response.ok({ message: 'Success', data: bookingJSON })
   }
 
