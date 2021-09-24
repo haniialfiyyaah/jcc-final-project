@@ -5,13 +5,34 @@ import CreateVenueValidator from 'App/Validators/CreateVenueValidator'
 import UpdateVenueValidator from 'App/Validators/UpdateVenueValidator'
 
 export default class VenuesController {
+  private serializeField = (venue) => {
+    return venue.serialize({
+      fields: { omit: ['user_id'] },
+      relations: {
+        owner: { fields: ['id', 'name', 'email'] },
+        fields: { fields: { omit: ['created_at', 'updated_at', 'venue_id'] } },
+        bookings: {
+          fields: { omit: ['created_at', 'updated_at', 'user_id_booking'] },
+          relations: { user_booking: { fields: ['id', 'name', 'email'] } },
+        },
+      },
+    })
+  }
+
   public async index({ request, response }: HttpContextContract) {
-    const { name, address, phone } = request.qs()
+    const { name, address, phone, type } = request.qs()
     const venues = await Venue.query()
       .where('name', 'like', `%${name || ''}%`)
       .where('address', 'like', `%${address || ''}%`)
       .where('phone', 'like', `%${phone || ''}%`)
-    response.ok({ message: 'Success.', data: venues })
+      .preload('user')
+      .preload('fields', (fields) => {
+        fields.where('type', 'like', `%${type || ''}%`)
+      })
+    const venuesJSON = venues
+      .map((v) => this.serializeField(v))
+      .filter((venue) => (type ? venue.fields.length > 0 : venue))
+    response.ok({ message: 'Success.', data: venuesJSON })
   }
 
   public async store({ auth, request, response }: HttpContextContract) {
@@ -27,11 +48,28 @@ export default class VenuesController {
     response.created({ message: 'Created.', data: newVenue })
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, request, response }: HttpContextContract) {
     const { id } = params
-    const venue = await Venue.findOrFail(id)
-    await venue.load('user')
-    response.ok({ message: 'Success.', data: venue })
+    const { date } = request.qs()
+    const currentDate = new Date().toLocaleDateString().split('/')
+    const now = [currentDate[2], currentDate[0], currentDate[1]].join('-')
+
+    const venue = await Venue.query()
+      .where('id', id)
+      .preload('user')
+      .preload('fields')
+      .preload('bookings', (booking) => {
+        booking
+          .whereBetween('play_date_start', [
+            `${date || now} 00:00`,
+            `${date || now} 23:59`,
+          ])
+          .preload('user')
+      })
+      .firstOrFail()
+    const venueJSON = this.serializeField(venue)
+
+    response.ok({ message: 'Success.', data: venueJSON })
   }
 
   public async update({ params, request, response }: HttpContextContract) {

@@ -10,8 +10,14 @@ export default class FieldsController {
       fields: { omit: ['venue_id'] },
       relations: {
         venue: {
-          fields: { omit: ['created_at', 'updated_at', 'user_id'] },
+          fields: ['created_at', 'updated_at', 'user_id'],
           relations: { owner: { fields: ['id', 'name', 'email'] } },
+        },
+        bookings: {
+          fields: {
+            omit: ['created_at', 'updated_at', 'field_id', 'user_id_booking'],
+          },
+          relations: { user_booking: { fields: ['id', 'name', 'email'] } },
         },
       },
     })
@@ -27,6 +33,9 @@ export default class FieldsController {
       .where('type', 'like', `%${type || ''}%`)
       .preload('venue', (venue) => {
         venue.preload('user')
+      })
+      .preload('bookings', (booking) => {
+        booking.preload('user')
       })
     const fieldsJSON = fields.map((field) => this.serializeField(field))
     response.ok({ message: 'Success.', data: fieldsJSON })
@@ -47,6 +56,9 @@ export default class FieldsController {
       .where('venue_id', venue_id)
       .preload('venue', (venue) => {
         venue.preload('user')
+      })
+      .preload('bookings', (booking) => {
+        booking.preload('user')
       })
       .firstOrFail()
     //  select fields

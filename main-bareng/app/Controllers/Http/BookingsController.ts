@@ -29,11 +29,7 @@ export default class BookingsController {
 
   public async index({ response }: HttpContextContract) {
     const bookings = await Booking.query()
-      .preload('field', (field) => {
-        field.preload('venue', (venue) => {
-          venue.preload('user')
-        })
-      })
+      .preload('field')
       .preload('user')
       .preload('players')
     const bookingsJSON = bookings.map((booking) => this.serializeField(booking))
@@ -70,27 +66,20 @@ export default class BookingsController {
     const booking = await Booking.query()
       .where('id', params.id)
       .preload('players')
-      .preload('field', (field) => {
-        field.preload('venue', (venue) => {
-          venue.preload('user')
-        })
-      })
+      .preload('field')
       .preload('user')
       .firstOrFail()
     const bookingJSON = this.serializeField(booking)
-    //  const bookingJSON = booking.serialize({
-    //   relations: {
-    //     players: {
-    //       fields: ['id', 'name', 'email'],
-    //     },
-    //   },
-    // })
     response.ok({ message: 'Success', data: bookingJSON })
   }
 
   public async join({ auth, params, response }: HttpContextContract) {
     const user = await User.findOrFail(auth.user?.id)
     const booking = await Booking.findOrFail(params.id)
+    await booking.load('players')
+    if (booking.players_count >= booking.total_players) {
+      return response.badRequest({ message: 'Quota is full.' })
+    }
     await booking.related('players').attach([user.id])
     response.created({ message: 'Successfully join.', status: true })
   }

@@ -57,6 +57,13 @@ export default class Booking extends BaseModel {
 
   @belongsTo(() => Field, {
     foreignKey: 'field_id',
+    onQuery(query) {
+      if (!query.isRelatedSubQuery) {
+        query.preload('venue', (venue) => {
+          if (!query.isRelatedSubQuery) venue.preload('user')
+        })
+      }
+    },
   })
   public field: BelongsTo<typeof Field>
 
