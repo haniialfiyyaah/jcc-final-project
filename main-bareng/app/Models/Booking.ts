@@ -1,5 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  belongsTo,
+  column,
+  computed,
+  ManyToMany,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Field from './Field'
 
@@ -57,4 +65,14 @@ export default class Booking extends BaseModel {
     serializeAs: 'user_booking',
   })
   public user: BelongsTo<typeof User>
+
+  @manyToMany(() => User, {
+    pivotTable: 'user_bookings',
+  })
+  public players: ManyToMany<typeof User>
+
+  @computed()
+  public get players_count() {
+    return this.players?.length
+  }
 }

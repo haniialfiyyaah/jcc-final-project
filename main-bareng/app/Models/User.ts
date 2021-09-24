@@ -6,6 +6,8 @@ import {
   BaseModel,
   hasMany,
   HasMany,
+  manyToMany,
+  ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import Venue from './Venue'
 import Booking from './Booking'
@@ -47,6 +49,11 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public bookings: HasMany<typeof Booking>
+
+  @manyToMany(() => Booking, {
+    pivotTable: 'user_bookings',
+  })
+  public play_schedules: ManyToMany<typeof Booking>
 
   @beforeSave()
   public static async hashPassword(user: User) {
