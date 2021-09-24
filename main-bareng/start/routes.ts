@@ -26,4 +26,8 @@ Route.group(() => {
   Route.post('/otp-confirmation', 'AuthController.otpConfirmation').as(
     'auth.otp.confirm'
   )
+  // must login and verify email
+  Route.group(() => {
+    Route.resource('venues', 'VenuesController').apiOnly()
+  }).middleware(['auth', 'verify'])
 }).prefix('/api/v1')

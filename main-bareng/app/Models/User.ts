@@ -7,7 +7,7 @@ import {
   hasMany,
   HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import OtpCode from './OtpCode'
+import Venue from './Venue'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -37,10 +37,10 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany(() => OtpCode, {
+  @hasMany(() => Venue, {
     foreignKey: 'user_id',
   })
-  public otp_codes: HasMany<typeof OtpCode>
+  public venues: HasMany<typeof Venue>
 
   @beforeSave()
   public static async hashPassword(user: User) {
