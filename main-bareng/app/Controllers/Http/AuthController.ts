@@ -2,12 +2,26 @@ import Mail from '@ioc:Adonis/Addons/Mail'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import OtpCode from 'App/Models/OtpCode'
 import User from 'App/Models/User'
+import LoginUserValidator from 'App/Validators/LoginUserValidator'
 import OtpValidator from 'App/Validators/OtpValidator'
 import RegisterUserValidator from 'App/Validators/RegisterUserValidator'
 
 export default class AuthController {
-  public async login({ request, response }: HttpContextContract) {
-    response.ok({ message: 'Login successful.' })
+  public async login({ auth, request, response }: HttpContextContract) {
+    try {
+      const { email, password } = await request.validate(LoginUserValidator)
+      const token = await auth.use('api').attempt(email, password)
+      response.ok({ message: 'Login success.', token })
+    } catch (error) {
+      if (error.guard) {
+        response.badRequest({ message: 'Login failed.', error: error.message })
+      } else {
+        response.badRequest({
+          message: 'Login failed.',
+          errors: error.messages?.errors,
+        })
+      }
+    }
   }
   public async register({ request, response }: HttpContextContract) {
     // validate
