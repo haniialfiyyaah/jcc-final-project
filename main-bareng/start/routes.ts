@@ -43,5 +43,27 @@ Route.group(() => {
         update: ['acl:owner'],
         destroy: ['acl:owner'],
       })
+    // user
+    Route.group(() => {
+      Route.post('/venues/:id/bookings', 'BookingsController.store').as(
+        'bookings.store'
+      )
+      // only user created can delete
+      Route.delete('/bookings/:id', 'BookingsController.destroy').as(
+        'bookings.destroy'
+      )
+      Route.put('/bookings/:id/join', 'BookingsController.join').as(
+        'bookings.join'
+      )
+      Route.put('/bookings/:id/unjoin', 'BookingsController.unjoin').as(
+        'bookings.unjoin'
+      )
+    }).middleware(['acl:user'])
+    // user and owner logged in
+    Route.get('/bookings', 'BookingsController.index').as('bookings.index')
+    Route.get('/bookings/:id', 'BookingsController.show').as('bookings.show')
+    Route.get('/schedules', 'BookingsController.schedules').as(
+      'bookings.schedules'
+    )
   }).middleware(['auth', 'verify'])
 }).prefix('/api/v1')

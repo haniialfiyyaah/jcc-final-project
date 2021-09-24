@@ -8,6 +8,7 @@ import {
   HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import Venue from './Venue'
+import Booking from './Booking'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -41,6 +42,11 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public venues: HasMany<typeof Venue>
+
+  @hasMany(() => Booking, {
+    foreignKey: 'user_id',
+  })
+  public bookings: HasMany<typeof Booking>
 
   @beforeSave()
   public static async hashPassword(user: User) {
