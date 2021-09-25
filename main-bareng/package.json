@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node ace build --prod",
+    "build": "npm run compile && node ace build --prod",
     "start": "node ace serve --watch",
-    "start:prod": "node ./build/server.js"
+    "start:prod": "node ./build/server.js",
+		"postbuild": "node ace swagger:generate && cp -a docs/ build/docs"
   },
   "engines": {
     "node": "14.17.5"
