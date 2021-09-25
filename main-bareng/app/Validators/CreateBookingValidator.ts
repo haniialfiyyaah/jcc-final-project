@@ -34,11 +34,11 @@ export default class CreateBookingValidator {
       },
       [
         rules.after('today'),
-        rules.unique({
-          table: 'bookings',
-          column: 'play_date_start',
-          where: { user_id: this.refs.user_id },
-        }),
+        // rules.unique({
+        //   table: 'bookings',
+        //   column: 'play_date_start',
+        //   where: { user_id: this.refs.user_id },
+        // }),
       ]
     ),
     play_date_end: schema.date.optional(
@@ -48,11 +48,11 @@ export default class CreateBookingValidator {
       [
         rules.after('today'),
         rules.afterField('play_date_start'),
-        rules.unique({
-          table: 'bookings',
-          column: 'play_date_end',
-          where: { user_id: this.refs.user_id },
-        }),
+        // rules.unique({
+        //   table: 'bookings',
+        //   column: 'play_date_end',
+        //   where: { user_id: this.refs.user_id },
+        // }),
       ]
     ),
     total_players: schema.number([rules.range(2, 100)]),
