@@ -1,0 +1,124 @@
+paths:
+  /api/v1/login:
+    post:
+      tags:
+        - Auth
+      security: []
+      description: Login
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+            example:
+              email: jane@mail.com
+              password: '123456'
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+            example:
+              email: jane@mail.com
+              password: '123456'
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+        422:
+          description: Unprocessable Entity
+
+  /api/v1/register:
+    post:
+      tags:
+        - Auth
+      security: []
+      description: Register
+      requestBody:
+        description: Optional description in *Markdown*
+        required:
+          - name
+          - email
+          - password
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User'
+            example:
+              name: Jane Doe
+              email: jane@mail.com
+              password: '123456'
+              role: user
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/definitions/User'
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Success
+        422:
+          description: Unprocessable Entity
+
+  /api/v1/otp-confirmation:
+    post:
+      tags:
+        - Auth
+      security: []
+      description: otp confirmation
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                otp_code:
+                  type: integer
+                email:
+                  type: string
+              required:
+                - otp_code
+                - email
+              example: # Sample object
+                otp_code: '999999'
+                email: jane@mail.com
+          application/x-www-form-urlencoded:
+            schema: # Request body contents
+              type: object
+              properties:
+                otp_code:
+                  type: integer
+                email:
+                  type: string
+              required:
+                - otp_code
+                - email
+              example: # Sample object
+                otp_code: '999999'
+                email: jane@mail.com
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+        400:
+          description: Fail
+        422:
+          description: Unprocessable Entity
