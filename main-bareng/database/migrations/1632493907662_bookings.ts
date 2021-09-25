@@ -11,6 +11,8 @@ export default class Bookings extends BaseSchema {
       table.integer('total_players')
       table.integer('field_id').unsigned().references('id').inTable('fields')
       table.integer('user_id').unsigned().references('id').inTable('users')
+      table.unique(['play_date_start', 'field_id'])
+      table.unique(['play_date_end', 'field_id'])
       table.unique(['play_date_start', 'play_date_end', 'user_id', 'field_id'])
 
       /**

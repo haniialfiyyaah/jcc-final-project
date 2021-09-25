@@ -23,19 +23,37 @@ export default class CreateBookingValidator {
    *     ])
    *    ```
    */
+  public refs = schema.refs({
+    user_id: this.ctx.auth.user!.id,
+  })
   public schema = schema.create({
     field_id: schema.number(),
     play_date_start: schema.date(
       {
         format: 'yyyy-MM-dd HH:mm:ss',
       },
-      [rules.after('today')]
+      [
+        rules.after('today'),
+        rules.unique({
+          table: 'bookings',
+          column: 'play_date_start',
+          where: { user_id: this.refs.user_id },
+        }),
+      ]
     ),
     play_date_end: schema.date.optional(
       {
         format: 'yyyy-MM-dd HH:mm:ss',
       },
-      [rules.after('today'), rules.afterField('play_date_start')]
+      [
+        rules.after('today'),
+        rules.afterField('play_date_start'),
+        rules.unique({
+          table: 'bookings',
+          column: 'play_date_end',
+          where: { user_id: this.refs.user_id },
+        }),
+      ]
     ),
     total_players: schema.number([rules.range(2, 100)]),
   })
@@ -51,5 +69,8 @@ export default class CreateBookingValidator {
    * }
    *
    */
-  public messages = {}
+  public messages = {
+    'play_date_start.unique': 'Already booked.',
+    'play_date_end.unique': 'Already booked.',
+  }
 }
