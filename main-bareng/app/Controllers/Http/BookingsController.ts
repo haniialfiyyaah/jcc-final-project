@@ -108,14 +108,14 @@ export default class BookingsController {
       return response.badRequest({ message: 'Quota is full.' })
     }
     await booking.related('players').attach([user.id])
-    response.created({ message: 'Successfully join.', status: true })
+    response.ok({ message: 'Successfully join.', status: true })
   }
 
   public async unjoin({ auth, params, response }: HttpContextContract) {
     const user = await User.findOrFail(auth.user?.id)
     const booking = await Booking.findOrFail(params.id)
     await booking.related('players').detach([user.id])
-    response.created({ message: 'Successfully unjoin.', status: true })
+    response.ok({ message: 'Successfully unjoin.', status: true })
   }
 
   public async destroy({ params, response }: HttpContextContract) {
