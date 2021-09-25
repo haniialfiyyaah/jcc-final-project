@@ -1,2 +1,15 @@
-# jcc-final-project
+# JCC FINAL PROJECT
+
 Final Project JCC - RestAPI Main Bareng
+
+<br/>
+
+## Contribute
+
+_Hani Alfiyyah Nurulhuda - hanii.alfiyyah@gmail.com_
+
+<br/>
+
+## Link Deploy
+
+https://jcc-main-bareng.herokuapp.com/
