@@ -3,9 +3,9 @@ definitions:
     type: object
     properties:
       id:
-        type: number
+        type: integer
       field_id:
-        type: number
+        type: integer
       play_date_start:
         type: string
         format: date-time

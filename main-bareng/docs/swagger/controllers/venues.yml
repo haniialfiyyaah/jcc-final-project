@@ -11,25 +11,29 @@ paths:
           description: Venue name
           in: query
           required: false
-          type: string
+          schema:
+            type: string
         - name: phone
           description: Venue phone
           in: query
           required: false
-          type: string
+          schema:
+            type: string
         - name: address
           description: Venue address
           in: query
           required: false
-          type: string
+          schema:
+            type: string
         - name: type
           description: Field type
           in: query
           required: false
-          type: string
-          enum: [soccer, minisoccer, futsal, basketball, volleyball]
-      produces:
-        - application/json
+          schema:
+            type: string
+            enum: [soccer, minisoccer, futsal, basketball, volleyball]
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -53,8 +57,8 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/definitions/Venue'
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -84,10 +88,10 @@ paths:
           required: false
           schema:
             type: string
-            format: date-time
+            format: yyyy-mm-dd
             default: '2021-09-25'
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -128,8 +132,8 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/definitions/Venue'
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -151,8 +155,8 @@ paths:
             type: integer
             minimum: 1
           description: The Venue ID
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -189,8 +193,8 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/definitions/Booking'
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success

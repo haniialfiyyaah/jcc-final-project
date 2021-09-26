@@ -37,8 +37,8 @@ paths:
             example:
               email: jane@mail.com
               password: '123456'
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -53,10 +53,7 @@ paths:
       description: Register
       requestBody:
         description: Optional description in *Markdown*
-        required:
-          - name
-          - email
-          - password
+        required: true
         content:
           application/json:
             schema:
@@ -69,8 +66,8 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               $ref: '#/definitions/User'
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         201:
           description: Success
@@ -84,6 +81,7 @@ paths:
       security: []
       description: otp confirmation
       requestBody:
+        required: true
         content:
           application/json:
             schema: # Request body contents
@@ -110,11 +108,8 @@ paths:
               required:
                 - otp_code
                 - email
-              example: # Sample object
-                otp_code: '999999'
-                email: jane@mail.com
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success

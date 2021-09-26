@@ -1,5 +1,5 @@
 definitions:
-  User:
+  Field:
     type: object
     properties:
       id:

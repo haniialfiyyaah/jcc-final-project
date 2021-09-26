@@ -11,25 +11,29 @@ paths:
           description: Venue name
           in: query
           required: false
-          type: string
+          schema:
+            type: string
         - name: play_date
           description: Venue phone
           in: query
           required: false
-          type: string
+          schema:
+            type: string
         - name: start
           description: Venue address
           in: query
           required: false
-          type: string
+          schema:
+            type: string
         - name: type
           description: Field type
           in: query
           required: false
-          type: string
-          enum: [soccer, minisoccer, futsal, basketball, volleyball]
-      produces:
-        - application/json
+          schema:
+            type: string
+            enum: [soccer, minisoccer, futsal, basketball, volleyball]
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -51,8 +55,8 @@ paths:
             type: integer
             minimum: 1
           description: The booking ID
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -76,8 +80,8 @@ paths:
             type: integer
             minimum: 1
           description: The booking ID
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -101,8 +105,8 @@ paths:
             type: integer
             minimum: 1
           description: The booking ID
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success
@@ -118,8 +122,8 @@ paths:
       security:
         - bearerAuth: []
       description: Menampilkan list booking yang diikuti oleh user yang sedang melakukan login
-      produces:
-        - application/json
+      # produces:
+      #   - application/json
       responses:
         200:
           description: Success

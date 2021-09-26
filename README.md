@@ -13,3 +13,7 @@ _Hani Alfiyyah Nurulhuda - hanii.alfiyyah@gmail.com_
 ## Link Deploy
 
 https://jcc-main-bareng.herokuapp.com/
+
+<br />
+
+### _<a href='https://jcc-main-bareng.herokuapp.com/docs'>Documentations</a>_
