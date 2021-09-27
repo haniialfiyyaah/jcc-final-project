@@ -4,13 +4,15 @@ Final Project JCC - RestAPI Main Bareng
 
 <br/>
 
-## Contribute
+## Data:
+
+_<h3>Back End Developer Node JS</h3>_
 
 _Hani Alfiyyah Nurulhuda - hanii.alfiyyah@gmail.com_
 
 <br/>
 
-## Link Deploy
+## Link Deploy:
 
 https://jcc-main-bareng.herokuapp.com/
 
