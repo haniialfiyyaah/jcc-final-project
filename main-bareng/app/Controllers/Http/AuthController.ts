@@ -18,7 +18,7 @@ export default class AuthController {
       if (error.guard) {
         response.badRequest({ message: 'Login failed.', error: error.message })
       } else {
-        response.badRequest({
+        response.unprocessableEntity({
           message: 'Login failed.',
           errors: error.messages?.errors,
         })

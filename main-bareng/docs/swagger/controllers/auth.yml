@@ -42,6 +42,8 @@ paths:
       responses:
         200:
           description: Success
+        400:
+          description: Failed
         422:
           description: Unprocessable Entity
 
